@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>    
+    </head>
+    <body ng-app="etsyApp" class="etsyApp">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <div class="wrapper container-fluid" ng-controller="etsyListCtrl">
+            
+            
+            <div class="row">
+                <div class="main-col col-xs-12 col-sm-6 col-md-8">
+                    <button type="button" class="btn btn-default btn-lg small-device-form" ng-click="toggleForm()">
+                      <span class="glyphicon glyphicon-align-justify"></span> 
+                    </button>
+
+                    
+                    <div class="row etsy-header page-header">
+                        <h1>Etsy App <small>Search on the Etsy catalog</small></h1>
+                    </div>
+                    <div class="row">
+                        <p class="bg-info results-found">
+                            Seeing {{catalog.params.limit}} of {{catalog.count}}. 
+                            <span ng-show="catalog.params.keywords">Filtered by keyword: {{catalog.params.keywords}}.</span>
+                            <span ng-show="catalog.params.sort_on">Sort by {{catalog.params.sort_on}}.</span>
+                            <span ng-show="catalog.params.sort_order == 'down'">Order: down to up.</span>
+                            <span ng-show="catalog.params.sort_order == 'up'">Order: up to down.</span>
+                        </p>            
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                             <ul class="list-unstyled">
+                                <li id="{{item.listing_id}}" class="main-item" ng-repeat="item in catalog.results | orderBy:orderProp">
+                                    <button class="close" ng-click="delete($index)" title="Delete this item">x</button>
+                                    
+                                    <h3 data-id="{{item.listing_id}}">{{item.title}}</h3>
+                                    <div class="pull-right img">
+                                        <img class="img-thumbnail" src="{{item.Images[0].url_75x75}}" alt="Etsy!" />
+                                    </div>
+                                    <dl class="dl-horizontal">
+                                        <dt>Who did it and When</dt>
+                                        <dd>{{item.who_made}} at {{item.when_made}}</dd>
+                                        <dt>Description</dt>
+                                        <dd class="description">{{item.description}}</dd>
+                                        <dt>Price</dt>
+                                        <dd>{{item.currency_code}} {{item.price}}</dd>
+                                        <dt>Quantity</dt>
+                                        <dd>{{item.quantity}}</dd>
+                                        <dt>Tags</dt>
+                                        <dd>
+                                            <ul class="list-unstyled list-inline" ng-repeat="tag in item.tags">
+                                                <li class="label label-success">{{tag}}</li>
+                                            </ul>
+                                        </dd>
+                                        <dt>Materials</dt>
+                                        <dd>
+                                            <ul class="list-unstyled list-inline" ng-repeat="material in item.materials">
+                                                <li class="label label-info">{{material}}</li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+                                    <div class="col-xs-12">
+                                        <p>{{item.views}} people has seen this item.</p>
+                                        <p><a href="{{item.url}}" target="_blank">See this article on Etsy</a></p>
+                                    </div>    
+                                </li>
+                            </ul>
+                            <div class="row">
+                                <ul class="pager">
+                                  <li><a href="#" ng-click="seeResultSet(-10)">See previous page</a></li>
+                                  <li><a href="#" ng-click="seeResultSet(10)">See next page</a></li>
+                                </ul>
+                            </div>    
+                        </div>        
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 form-column">
+                    <div class="col-xs-8 pull-right">
+                    <div class="form">
+                        <form>
+                            <div class="form-group">
+                            <label for="keyword">Refine results by:</label>
+                            <input class="form-control" id="keyword" name="filter" ng-model="config.keywords" placeholder="Search..." />
+                            </div>    
+                            
+                            <div class="form-group">
+                            <label for="sort_order">Order from:</label>
+                            <select class="form-control" id="sort_order" ng-model="config.sortOrder">
+                                <option value="up">Up to Down</option>
+                                <option value="down">Down to Up</option>
+                            </select>
+                            </div>
+                            
+                            <div class="form-group">
+                            <label for="sort_on">Sort all the results by:</label>
+                            <select class="form-control" id="sort_on" ng-model="config.sort_on">
+                                <option value="created">Created</option>
+                                <option value="price">Price</option>
+                                <option value="score">Score</option>
+                            </select>
+                            </div>
+                            
+                            <div class="form-group">
+                            <label for="sort">Sort this page by:</label>
+                            <select class="form-control" id="sort" ng-model="orderProp">
+                                <option value="title">Alphabet</option>
+                                <option value="location">Location</option>
+                            </select>
+                            </div>
+                            
+                            <button ng-click="fetch()" class="btn btn-primary">Search</button>
+                            <p class="bg-danger sort-message hidden">Please notice you should choose a value both on "Order by" and "Order from" to sort results.</p>
+
+                        </form>
+                    </div>
+                        </div>
+                </div>
+            </div>
+                        
+        </div>
+        
+        
+        <!--Javascript-->
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+        <script src="js/vendor/angular.min.js"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+    
+        <script src="js/controller.js"></script>
+    </body>
+</html>
