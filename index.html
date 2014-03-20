@@ -26,10 +26,8 @@
             
             <div class="row">
                 <div class="main-col col-xs-12 col-sm-6 col-md-8">
-                    <button type="button" class="btn btn-default btn-lg small-device-form" ng-click="toggleForm()">
-                      <span class="glyphicon glyphicon-align-justify"></span> 
-                    </button>
 
+					
                     
                     <div class="row etsy-header page-header">
                         <h1>Etsy App <small>Search on the Etsy catalog</small></h1>
@@ -41,7 +39,8 @@
                             <span ng-show="catalog.params.sort_on">Sort by {{catalog.params.sort_on}}.</span>
                             <span ng-show="catalog.params.sort_order == 'down'">Order: down to up.</span>
                             <span ng-show="catalog.params.sort_order == 'up'">Order: up to down.</span>
-                        </p>            
+                        </p>
+						<a class="small-device-form" ng-click="toggleForm()">&raquo; Apply filters on Etsy catalog.</a>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">

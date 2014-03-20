@@ -105,8 +105,12 @@ body {
     .etsyApp .form-column.open{
         right: 0px;
     }
+	.etsyApp  .form-column  .col-xs-8{
+		width: 89.666667%;
+	}
     .etsyApp .small-device-form{
         display: block;
+		cursor:pointer;
     }
 }
 
